@@ -20,7 +20,7 @@ while len(numbers) < 20:
             if first_number == second_number:
                 continue
             current_value = first_number + second_number
-            print(first_number, "+", second_number, "=", current_value, "First loop:", first_loop)
+            # print(first_number, "+", second_number, "=", current_value, "First loop:", first_loop)
             if current_value in numbers:
                 continue
             if current_value in unavailable_numbers:
@@ -36,11 +36,10 @@ while len(numbers) < 20:
                 unavailable_numbers.append(current_value)
             else:
                 candidates.append(current_value)
-                print("")
 
     if len(candidates) > 0:
         numbers.append(candidates[0])
-        print("Added", candidates[0])
+        # print("Added", candidates[0])
 
 end_time = time.time() * 1000
 
