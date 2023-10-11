@@ -1,14 +1,18 @@
 import time
 from itertools import islice
 
+# Na tem problemu sem porabil ~ 4 ure
+# Izziv mi je bil izredno všeč
+# Za števila manjša od 1000 porabi ~15 sekund,
+# za 10E3 in 10E4 mi ni uspelo dobiti rezultata v manj kot minuti
+
 numbers = [1, 2]  # dvoumna stevila
 
 unavailable_numbers = []
 
 start_time = time.time() * 1000  # in milliseconds
 
-while len(numbers) < 20:
-    length = len(numbers)
+while numbers[len(numbers) - 1] < 1000:
     candidates = []
     # loop trough numbers
     for first_number in numbers:
@@ -16,7 +20,7 @@ while len(numbers) < 20:
             if first_number == second_number:
                 continue
             current_value = first_number + second_number
-            # print(first_number, "+", second_number, "=", current_value, "First loop:", first_loop)
+            # print(first_number, "+", second_number, "=", current_value)
             if current_value in numbers:
                 continue
             if current_value in unavailable_numbers:
@@ -29,8 +33,8 @@ while len(numbers) < 20:
                 candidates.append(current_value)
 
     if len(candidates) > 0:
+        candidates.sort()
         numbers.append(candidates[0])
-        # print("Added", candidates[0])
 
 end_time = time.time() * 1000
 
@@ -38,4 +42,4 @@ end_time = time.time() * 1000
 print(numbers)
 
 # print time taken
-print("It took ", end_time - start_time, "ms to complete")
+print("It took ", round(end_time - start_time, 2), "ms to complete")
