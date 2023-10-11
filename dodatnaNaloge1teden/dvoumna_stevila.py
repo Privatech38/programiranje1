@@ -7,13 +7,9 @@ unavailable_numbers = []
 
 start_time = time.time() * 1000  # in milliseconds
 
-
-
 while len(numbers) < 20:
     length = len(numbers)
-    last_unique_number = 0
     candidates = []
-    first_loop = True
     # loop trough numbers
     for first_number in numbers:
         for second_number in islice(numbers, numbers.index(first_number) + 1, None):
@@ -25,14 +21,9 @@ while len(numbers) < 20:
                 continue
             if current_value in unavailable_numbers:
                 continue
-            #if not first_loop and current_value > last_unique_number:
-            #    break
             # unique number was successfully found
-            first_loop = False
             if current_value in candidates:
                 candidates.remove(current_value)
-                last_unique_number = 0
-                first_loop = True
                 unavailable_numbers.append(current_value)
             else:
                 candidates.append(current_value)
