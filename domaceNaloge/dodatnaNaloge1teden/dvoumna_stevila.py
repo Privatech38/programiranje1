@@ -8,11 +8,11 @@ from itertools import islice
 
 numbers = [1, 2]  # dvoumna stevila
 
-unavailable_numbers = []
+unavailable_numbers = set()
 
 start_time = time.time() * 1000  # in milliseconds
 
-while numbers[len(numbers) - 1] < 1000:
+while numbers[len(numbers) - 1] < 2000:
     candidates = []
     # loop trough numbers
     for first_number in numbers:
@@ -28,7 +28,7 @@ while numbers[len(numbers) - 1] < 1000:
             # unique number was successfully found
             if current_value in candidates:
                 candidates.remove(current_value)
-                unavailable_numbers.append(current_value)
+                unavailable_numbers.add(current_value)
             else:
                 candidates.append(current_value)
 
