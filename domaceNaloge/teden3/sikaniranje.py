@@ -38,7 +38,7 @@ for cords in ovire:
 
 najdalsa_pot = (0, 0)
 najdalse_poti = []
-# ustvari začetne dolžine z vsak stolpec
+# Preveri dolžino za vsak stolpec
 x = 1
 while x <= sirina:
     trenutna = (x, najkrajsaPot(x))
