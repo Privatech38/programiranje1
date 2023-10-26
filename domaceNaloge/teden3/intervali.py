@@ -13,6 +13,7 @@ while i < len(intervali) - 1:
         i += 1
 # Preštej vmesna števils
 
+print(intervali)
 dovoljena_stevila = 0
 
 i = 0
