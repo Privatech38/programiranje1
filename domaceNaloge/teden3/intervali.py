@@ -14,4 +14,16 @@ while i < len(intervali) - 1:
     else:
         dovoljena_stevila += razlika - 1
         i += 1
+# Preštej vmesna števils
+
+print(intervali)
+dovoljena_stevila = 0
+
+i = 0
+while i < len(intervali) - 1:
+    kolicina = intervali[i + 1][0] - intervali[i][1] - 1
+    if kolicina > 0:
+        dovoljena_stevila += kolicina
+    i += 1
+
 print(dovoljena_stevila)
