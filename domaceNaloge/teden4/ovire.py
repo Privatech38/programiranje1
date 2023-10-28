@@ -50,24 +50,15 @@ def izboljsave(prej, potem):
     return pretvori_zemljevid(zemlevid)
 
 def huligani(prej, potem):
-    zemlevid_novi = []
-    zemljevid_odstranjeni = []
-    for vrstica in zip(prej, potem):
-        s_novi = ''
-        s_odstranjeni = ''
-        for c_prej, c_potem in zip(vrstica[0], vrstica[1]):
-            if c_prej == '.' and c_potem == '#':
-                s_novi += '#'
-                s_odstranjeni += '.'
-            elif c_prej == '#' and c_potem == '.':
-                s_novi += '.'
-                s_odstranjeni += '#'
-            else:
-                s_novi += '.'
-                s_odstranjeni += '.'
-        zemlevid_novi.append(s_novi)
-        zemljevid_odstranjeni.append(s_odstranjeni)
-    return pretvori_zemljevid(zemlevid_novi), pretvori_zemljevid(zemljevid_odstranjeni)
+    zemlevid_prej = pretvori_zemljevid(prej)
+    zemlevid_potem = pretvori_zemljevid(potem)
+    for ovira in zemlevid_prej:
+        if ovira in zemlevid_potem:
+            zemlevid_potem.remove(ovira)
+    for ovira in pretvori_zemljevid(potem):
+        if ovira in zemlevid_prej:
+            zemlevid_prej.remove(ovira)
+    return zemlevid_potem, zemlevid_prej
 
 class Test(unittest.TestCase):
     def test_dolzina_ovir(self):
