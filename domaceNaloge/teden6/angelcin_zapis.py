@@ -1,3 +1,4 @@
+import itertools
 import unittest
 
 def koordinate(ovira):
@@ -30,7 +31,14 @@ def zapisi_vrstico(y, xs):
     return f"({y}) " + " ".join(intervali(xs))
 
 def zapisi(ovire):
-    sorted(ovire)
+    jaoo = []
+    jaoo = []
+    for y, xs in itertools.groupby(sorted(ovire, key=lambda x: (x[2], x[0])), lambda x: x[2]):
+        inters = []
+        for interval in xs:
+            inters.append((interval[0], interval[1]))
+        jaoo.append(zapisi_vrstico(y, inters))
+    return "\n".join(jaoo)
 
 class Obvezna(unittest.TestCase):
     def test_koordinate(self):
