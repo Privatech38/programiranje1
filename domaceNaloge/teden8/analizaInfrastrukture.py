@@ -115,6 +115,10 @@ def enosmerne(zemljevid):
 def dvosmerne(zemljevid):
     return {vmesna_pot:zemljevid[vmesna_pot] for vmesna_pot in zemljevid if (vmesna_pot[-1], vmesna_pot[0]) in zemljevid}
 
+
+def najzahtevnejsi_odsek(pot, zemljevid):
+    return max([(vmesna_pot, zemljevid[vmesna_pot]) for vmesna_pot in pairwise(pot)], key=lambda x: len(x[1]))[0]
+
 class Test01Obvezna(unittest.TestCase):
     def test_0_ena_vrstica(self):
         pricakovane = "nove_povezave obiskane_tocke popravljena_pot povezave_z_vescino dolgocasna_pot" \
