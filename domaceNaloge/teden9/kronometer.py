@@ -152,7 +152,7 @@ def zastavice(pot, pribitkii):
 
 def cikel(zacetna_tocka, pribitki):
     prejsnja_tocka = ''
-    zacetna_tocka = min([povezava for povezava in zemljevid if povezava[0] == zacetna_tocka and not (povezava[1] == prejsnja_tocka)], key=lambda x: x[1])
+    zacetna_tocka = min(sorted([(povezava, sum([pribitki[ovira] for ovira in ovire])) for povezava, ovire in zemljevid.items() if povezava[0] == zacetna_tocka and not (povezava[1] == prejsnja_tocka)], key=lambda x: x[0][1]), key=lambda x: x[1])
 
 
 class Test06(unittest.TestCase):
