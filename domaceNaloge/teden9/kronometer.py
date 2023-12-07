@@ -134,6 +134,25 @@ def trening(pot, pribitki):
 
 
 def zastavice(pot, pribitkii):
+    mozne_zastavice = set(pot)
+    stevilo_zastavic = [0] * len(pribitkii)
+    cas = [0] * len(pribitkii)
+    # Initial zastavica
+    stevilo_zastavic[0] = 1
+    mozne_zastavice.remove(pot[0])
+    # Ostale zastvice
+    for povezava in poti(pot):
+        for i, pribitki in enumerate(pribitkii):
+            cas[i] += sum([pribitki[ovira] for ovira in zemljevid[povezava]])
+        if povezava[1] in mozne_zastavice:
+            stevilo_zastavic[cas.index(min(cas))] += 1
+            mozne_zastavice.remove(povezava[1])
+    return stevilo_zastavic
+
+
+def cikel(zacetna_tocka, pribitki):
+    prejsnja_tocka = ''
+    zacetna_tocka = min([povezava for povezava in zemljevid if povezava[0] == zacetna_tocka and not (povezava[1] == prejsnja_tocka)], key=lambda x: x[1])
 
 
 class Test06(unittest.TestCase):
