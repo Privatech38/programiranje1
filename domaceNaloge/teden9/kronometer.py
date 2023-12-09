@@ -1,8 +1,8 @@
-
-
-
+import itertools
+import re
 import unittest
 from itertools import pairwise
+from collections import defaultdict
 
 A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, R, S, T, U, V = "ABCDEFGHIJKLMNOPRSTUV"
 
@@ -83,6 +83,7 @@ pribitki4 = dict(gravel=2, trava=3, lonci=1, bolt=2, pešci=100,
 
 # Naloge
 
+
 def poti(niz):
     for a, b in pairwise(niz):
         yield a, b
@@ -94,7 +95,9 @@ def cas_za_povezavo(povezava, pribitki):
 
 
 def cas(pot, pribitki):
-    return sum([cas_za_povezavo(povezava, pribitki) for povezava in poti(pot)])
+    r = sum([cas_za_povezavo(povezava, pribitki) for povezava in poti(pot)])
+    # print(r, pot)
+    return r
 
 
 def povezava_spotike(pribitki):
@@ -156,14 +159,52 @@ def cikel(zacetna_tocka, pribitki):
     while True:
         trenutna_povezava = min(sorted([(povezava, sum([pribitki[ovira] for ovira in ovire])) for povezava, ovire in zemljevid.items() if povezava[0] == zacetna_tocka and not (povezava[1] == prejsnja_tocka)], key=lambda x: x[0][1]), key=lambda x: x[1])[0]
         prejsnja_tocka, zacetna_tocka = trenutna_povezava
-        print(trenutna_povezava)
         if trenutna_povezava in opravljene_povezave:
             return len(opravljene_povezave[opravljene_povezave.index(trenutna_povezava):])
-        else:
-            opravljene_povezave.append(trenutna_povezava)
+        opravljene_povezave.append(trenutna_povezava)
 
 
-
+def izpadanje(potke, pribitkii):
+    print(potke)
+    # Doloci presecisca
+    tocke = set("".join(potke))
+    skupna_krizisca = []
+    stevilo = len(potke)
+    potke_z_indexi = list(enumerate(potke))
+    while stevilo > 1:
+        for kombinacija in itertools.combinations(potke_z_indexi, stevilo):
+            presecisca = set.intersection(*list(map(lambda x: set(x[1]), kombinacija)))
+            for presecisce in presecisca:
+                if presecisce not in tocke:
+                    continue
+                s = "".join(presecisce)
+                # print(kombinacija)
+                skupna_krizisca.append((s, sorted([(i, cas(potka[:potka.index(s) + 1], pribitkii[i])) for i, potka in kombinacija],
+                                      key=lambda x: x[1])))
+                tocke.remove(s)
+        stevilo -= 1
+    # Sortiraj
+    skupna_krizisca.sort(key=lambda x: x[1][0][1])
+    print(skupna_krizisca)
+    # Določi izpadle kolesarje
+    izpadli_kolesarji = dict()
+    # Določi kolesarje ki se ustrelijo v nogo
+    for i, potka in enumerate(potke):
+        if len(set(potka)) == len(potka):
+            continue
+        duped_tocka = "".join(set([char for char in potka if potka.count(char) >= 2]))[0]
+        izpadli_kolesarji[i] = cas(potka[:[match.start() for match in re.finditer(re.compile(duped_tocka), potka)][1]], pribitkii[i])
+    for skupo_krizisce in skupna_krizisca:
+        zmagovalec = True
+        for kolesarjev_cas in skupo_krizisce[1]:
+            if kolesarjev_cas[0] in izpadli_kolesarji and kolesarjev_cas[1] >= izpadli_kolesarji[kolesarjev_cas[0]]:
+                continue
+            if zmagovalec:
+                zmagovalec = False
+                continue
+            izpadli_kolesarji[kolesarjev_cas[0]] = kolesarjev_cas[1]
+    izpadli_kolesarji = list(map(lambda x: x[0], sorted(izpadli_kolesarji.items(), key=lambda x: (x[1], x[0]))))
+    return izpadli_kolesarji
 
 class Test06(unittest.TestCase):
     def test_01_cas_za_povezavo(self):
@@ -327,7 +368,7 @@ class Test10(unittest.TestCase):
         self.assertEqual([1, 0], izpadanje(["PNMIR", "SPI", "GIE"], [ni_pribitkov, ni_pribitkov, ni_pribitkov]))
 
         # vmes se še tretji ustreli v nogo
-        self.assertEqual([1,3, 0], izpadanje(["PNMIR", "SPI", "GIE", "DFD"], [ni_pribitkov] * 4))
+        self.assertEqual([1 ,3, 0], izpadanje(["PNMIR", "SPI", "GIE", "DFD"], [ni_pribitkov] * 4))
         # ničti izrine prvega na P, drugega na I
         self.assertEqual([1, 3, 2], izpadanje(["PNMIR", "SPI", "GIE", "DFD"], [ni_pribitkov, ni_pribitkov, avtocesta, ni_pribitkov]))
 
