@@ -95,9 +95,7 @@ def cas_za_povezavo(povezava, pribitki):
 
 
 def cas(pot, pribitki):
-    r = sum([cas_za_povezavo(povezava, pribitki) for povezava in poti(pot)])
-    # print(r, pot)
-    return r
+    return sum([cas_za_povezavo(povezava, pribitki) for povezava in poti(pot)])
 
 
 def povezava_spotike(pribitki):
@@ -165,7 +163,6 @@ def cikel(zacetna_tocka, pribitki):
 
 
 def izpadanje(potke, pribitkii):
-    print(potke)
     # Doloci presecisca
     tocke = set("".join(potke))
     skupna_krizisca = []
@@ -178,14 +175,12 @@ def izpadanje(potke, pribitkii):
                 if presecisce not in tocke:
                     continue
                 s = "".join(presecisce)
-                # print(kombinacija)
                 skupna_krizisca.append((s, sorted([(i, cas(potka[:potka.index(s) + 1], pribitkii[i])) for i, potka in kombinacija],
                                       key=lambda x: x[1])))
                 tocke.remove(s)
         stevilo -= 1
     # Sortiraj
     skupna_krizisca.sort(key=lambda x: x[1][0][1])
-    print(skupna_krizisca)
     # Določi izpadle kolesarje
     izpadli_kolesarji = dict()
     # Določi kolesarje ki se ustrelijo v nogo
