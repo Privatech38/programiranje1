@@ -66,6 +66,39 @@ def angelca(x, y, znamenitosti, zemljevid):
     return amount
 
 
+def johanca(x, y, pot, zemljevid):
+    mozne_tocke = set(chain(*zemljevid.values()))
+    porabljene_tocke = set()
+    zapisane_tocke = ""
+    stev = ""
+    n = 1
+    for smer in pot:
+        if smer.isdigit():
+            stev += smer
+            continue
+        if stev != "":
+            n = int(stev)
+            stev = ""
+        if smer == '>':
+            x += 1 * n
+        if smer == '<':
+            x -= 1 * n
+        if smer == 'v':
+            y += 1 * n
+        if smer == '^':
+            y -= 1 * n
+        n = 1
+        # Check if exists
+        if (x, y) in porabljene_tocke:
+            continue
+        if (x, y) in mozne_tocke:
+            for key, value in zemljevid.items():
+                if (x, y) in value:
+                    zapisane_tocke += key
+                    porabljene_tocke.add((x, y))
+                    break
+    return zapisane_tocke
+
 
 class NoWarningTest(unittest.TestCase):
     def setUp(self) -> None:
