@@ -109,8 +109,7 @@ def najboljsa_cetrt(a, zemljevid):
             for i in range(a):
                 for j in range(a):
                     kvadrat.add((i + s, j + v))
-            stevilo_znamenitosti.append(((s, v), len(kvadrat.intersection(tocke))))
-    print(stevilo_znamenitosti)
+            stevilo_znamenitosti.append(((s, v), len(kvadrat & tocke)))
     return max(stevilo_znamenitosti, key=lambda x: x[1])[0]
 
 
