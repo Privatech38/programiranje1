@@ -56,6 +56,18 @@ def vsi_najpogostejsi(x, y, d, zemljevid):
     return {key for key, value in tocke_v_blizini.items() if value == max_amount}
 
 
+def angelca(x, y, znamenitosti, zemljevid, prepovedani=None):   # Attempt da bi hitrejš delal za 9. nalogo
+    if prepovedani is None:
+        prepovedani = set()
+    if not znamenitosti: return 0
+    najblizja_tocka = najblizji(x, y, znamenitosti[0], zemljevid, prepovedani)
+    if not najblizja_tocka: return 0
+    amount = razdalja((x, y), najblizja_tocka)
+    prepovedani.add(najblizja_tocka)
+    amount += angelca(najblizja_tocka[0], najblizja_tocka[1], znamenitosti[1:], zemljevid, prepovedani)
+    return amount
+
+
 def angelca(x, y, znamenitosti, zemljevid):
     amount = 0
     prepovedani = set()
