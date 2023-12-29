@@ -19,8 +19,6 @@ def preberi_zemljevid(ime_dat):
                 tocke[match.group()].add((match.start(), i))
     return tocke
 
-print("Hello", preberi_zemljevid("dravlje.txt")['a'])
-
 def najblizji(x, y, c, zemljevid, prepovedani):
     iterable = c and set(zemljevid[c]) or set(chain(*zemljevid.values()))
     iterable -= {(x, y)}
@@ -98,6 +96,24 @@ def johanca(x, y, pot, zemljevid):
                     porabljene_tocke.add((x, y))
                     break
     return zapisane_tocke
+
+
+def najboljsa_cetrt(a, zemljevid):
+    tocke = set(chain(*zemljevid.values()))
+    sirina = max(tocke, key=lambda x: x[0])[0] - a + 2
+    visina = max(tocke, key=lambda x: x[1])[1] - a + 2
+    stevilo_znamenitosti = list()
+    for s in range(sirina):
+        for v in range(visina):
+            kvadrat = set()
+            for i in range(a):
+                for j in range(a):
+                    kvadrat.add((i + s, j + v))
+            stevilo_znamenitosti.append(((s, v), len(kvadrat.intersection(tocke))))
+    print(stevilo_znamenitosti)
+    return max(stevilo_znamenitosti, key=lambda x: x[1])[0]
+
+
 
 
 class NoWarningTest(unittest.TestCase):
