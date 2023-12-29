@@ -1,8 +1,52 @@
-
-
+import re
 import unittest
 import warnings
 import time
+from collections import defaultdict
+from itertools import chain, groupby
+
+
+def razdalja(tocka1, tocka2):
+    return abs(tocka1[0] - tocka2[0]) + abs(tocka1[1] - tocka2[1])
+
+
+def preberi_zemljevid(ime_dat):
+    tocke = defaultdict(lambda: list())
+    pattern = re.compile(r'[a-z]')
+    with open(ime_dat) as input:
+        for i, line in enumerate(input):
+            for match in re.finditer(pattern, line):
+                tocke[match.group()].append((match.start(), i))
+    # for key, value in tocke.items():
+    #     tocke[key] = sorted(value, key=lambda x: x)
+    return tocke
+
+
+def najblizji(x, y, c, zemljevid):
+    iterable = sorted(c and zemljevid[c] or chain(*zemljevid.values()), key=lambda x: x)
+    if (x, y) in iterable: iterable.remove((x, y))
+    return min([value for value in iterable], key=lambda value: razdalja((x, y), value))
+
+
+def najpogostejsi(x, y, d, zemljevid):
+    tocke_v_blizini = defaultdict(lambda: 0)
+    for key, value in zemljevid.items():
+        for tocka in value:
+            if razdalja((x, y), tocka) <= d: tocke_v_blizini[key] += 1
+    if not len(tocke_v_blizini): return None
+    return max(sorted(tocke_v_blizini), key=tocke_v_blizini.get)
+
+
+def vsi_najpogostejsi(x, y, d, zemljevid):
+    tocke_v_blizini = defaultdict(lambda: 0)
+    for key, value in zemljevid.items():
+        for tocka in value:
+            if razdalja((x, y), tocka) <= d: tocke_v_blizini[key] += 1
+    if not len(tocke_v_blizini): return set()
+    maxAmount = max(tocke_v_blizini.values())
+    return {key for key, value in tocke_v_blizini.items() if value == maxAmount}
+
+
 
 class NoWarningTest(unittest.TestCase):
     def setUp(self) -> None:
