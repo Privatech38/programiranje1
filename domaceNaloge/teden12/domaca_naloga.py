@@ -13,8 +13,8 @@ def razdalja(tocka1, tocka2):
 def preberi_zemljevid(ime_dat):
     tocke = defaultdict(lambda: list())
     pattern = re.compile(r'[a-z]')
-    with open(ime_dat) as input:
-        for i, line in enumerate(input):
+    with open(ime_dat) as vrstice:
+        for i, line in enumerate(vrstice):
             for match in re.finditer(pattern, line):
                 tocke[match.group()].append((match.start(), i))
     # for key, value in tocke.items():
@@ -22,9 +22,15 @@ def preberi_zemljevid(ime_dat):
     return tocke
 
 
-def najblizji(x, y, c, zemljevid):
+def najblizji(x, y, c, zemljevid, prepovedani):
     iterable = sorted(c and zemljevid[c] or chain(*zemljevid.values()), key=lambda x: x)
-    if (x, y) in iterable: iterable.remove((x, y))
+    if (x, y) in iterable:
+        iterable.remove((x, y))
+    for prepovedana_tocka in prepovedani:
+        if prepovedana_tocka in iterable:
+            iterable.remove(prepovedana_tocka)
+    if not len(iterable):
+        return None
     return min([value for value in iterable], key=lambda value: razdalja((x, y), value))
 
 
@@ -32,7 +38,8 @@ def najpogostejsi(x, y, d, zemljevid):
     tocke_v_blizini = defaultdict(lambda: 0)
     for key, value in zemljevid.items():
         for tocka in value:
-            if razdalja((x, y), tocka) <= d: tocke_v_blizini[key] += 1
+            if razdalja((x, y), tocka) <= d:
+                tocke_v_blizini[key] += 1
     if not len(tocke_v_blizini): return None
     return max(sorted(tocke_v_blizini), key=tocke_v_blizini.get)
 
@@ -41,10 +48,25 @@ def vsi_najpogostejsi(x, y, d, zemljevid):
     tocke_v_blizini = defaultdict(lambda: 0)
     for key, value in zemljevid.items():
         for tocka in value:
-            if razdalja((x, y), tocka) <= d: tocke_v_blizini[key] += 1
-    if not len(tocke_v_blizini): return set()
-    maxAmount = max(tocke_v_blizini.values())
-    return {key for key, value in tocke_v_blizini.items() if value == maxAmount}
+            if razdalja((x, y), tocka) <= d:
+                tocke_v_blizini[key] += 1
+    if not len(tocke_v_blizini):
+        return set()
+    max_amount = max(tocke_v_blizini.values())
+    return {key for key, value in tocke_v_blizini.items() if value == max_amount}
+
+
+def angelca(x, y, znamenitosti, zemljevid):
+    amount = 0
+    prepovedani = set()
+    for znamenitost in znamenitosti:
+        najblizja_tocka = najblizji(x, y, znamenitost, zemljevid, prepovedani)
+        if najblizja_tocka is None:
+            return amount
+        amount += razdalja((x, y), najblizja_tocka)
+        x, y = najblizja_tocka
+        prepovedani.add(najblizja_tocka)
+    return amount
 
 
 
