@@ -11,24 +11,21 @@ def razdalja(tocka1, tocka2):
 
 
 def preberi_zemljevid(ime_dat):
-    tocke = defaultdict(lambda: list())
+    tocke = defaultdict(lambda: set())
     pattern = re.compile(r'[a-z]')
     with open(ime_dat) as vrstice:
         for i, line in enumerate(vrstice):
             for match in re.finditer(pattern, line):
-                tocke[match.group()].append((match.start(), i))
-    # for key, value in tocke.items():
-    #     tocke[key] = sorted(value, key=lambda x: x)
+                tocke[match.group()].add((match.start(), i))
     return tocke
 
+print("Hello", preberi_zemljevid("dravlje.txt")['a'])
 
 def najblizji(x, y, c, zemljevid, prepovedani):
-    iterable = sorted(c and zemljevid[c] or chain(*zemljevid.values()), key=lambda x: x)
-    if (x, y) in iterable:
-        iterable.remove((x, y))
-    for prepovedana_tocka in prepovedani:
-        if prepovedana_tocka in iterable:
-            iterable.remove(prepovedana_tocka)
+    iterable = c and set(zemljevid[c]) or set(chain(*zemljevid.values()))
+    iterable -= {(x, y)}
+    iterable -= prepovedani
+    iterable = sorted(list(iterable))
     if not len(iterable):
         return None
     return min([value for value in iterable], key=lambda value: razdalja((x, y), value))
