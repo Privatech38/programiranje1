@@ -122,7 +122,6 @@ def najboljsa_cetrt(a, zemljevid):
 
 @cache
 def dosegljive_rekurzivna(x, y, d, n, max_n, zemljevid, izpostave, prejsnja_pot=frozenset()):
-    # print(x, y, n, max_n)
     # Poglej za izpostave
     if (x, y) in izpostave:
         n = max_n
@@ -131,10 +130,6 @@ def dosegljive_rekurzivna(x, y, d, n, max_n, zemljevid, izpostave, prejsnja_pot=
     najblizje_tocke = set()
     if n == 0:
         najblizje_tocke = {tocka for tocka in izpostave if razdalja((x, y), tocka) <= d}
-        # if len(najblizje_izpostave) > 0:
-        #     print(x, y, n, "Imam blizu izpostave:", najblizje_izpostave)
-        #     for izpostava in najblizje_izpostave:
-        #         tocke |= dosegljive_rekurzivna(*izpostava, d, max_n, max_n, zemljevid, izpostave, prejsnja_pot)
     else:
         najblizje_tocke = {tocka for tocka in zemljevid if razdalja((x, y), tocka) <= d}
         tocke |= set(najblizje_tocke) - izpostave
