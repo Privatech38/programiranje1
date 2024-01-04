@@ -14,7 +14,7 @@ def razdalja(tocka1, tocka2):
 def preberi_zemljevid(ime_dat):
     tocke = defaultdict(lambda: set())
     izpostave = set()
-    pattern = re.compile(r'[a-z]')
+    pattern = re.compile(r'[a-z*]')
     izpostave_pattern = re.compile(r'\*')
     with open(ime_dat) as vrstice:
         for i, line in enumerate(vrstice):
@@ -23,6 +23,8 @@ def preberi_zemljevid(ime_dat):
             for match in re.finditer(izpostave_pattern, line):
                 izpostave.add((match.start(), i))
     return tocke, frozenset(izpostave)
+
+print(preberi_zemljevid("dravlje-z-izpostavami.txt")[1])
 
 def najblizji(x, y, c, zemljevid, prepovedani):
     iterable = c and set(zemljevid[0][c]) or set(chain(*zemljevid[0].values()))
@@ -119,20 +121,26 @@ def najboljsa_cetrt(a, zemljevid):
 
 
 @cache
-def dosegljive_rekurzivna(x, y, d, n, zemljevid, izpostave, prejsnja_pot=frozenset()):
+def dosegljive_rekurzivna(x, y, d, n, max_n, zemljevid, izpostave, prejsnja_pot=frozenset()):
+    # print(x, y, n, max_n)
+    # Poglej za izpostave
+    if (x, y) in izpostave:
+        n = max_n
+    # Zapisi tocke
+    tocke = set()
     if n == 0:
         return set()
     najblizje_tocke = {tocka for tocka in zemljevid if razdalja((x, y), tocka) <= d}
-    tocke = set(najblizje_tocke)
+    tocke |= set(najblizje_tocke) - izpostave
     najblizje_tocke -= prejsnja_pot
-
     for tocka in najblizje_tocke:
-        tocke |= dosegljive_rekurzivna(*tocka, d, n - 1, zemljevid, frozenset({(x, y)} | prejsnja_pot))
+        tocke |= dosegljive_rekurzivna(*tocka, d, n - 1, max_n, zemljevid, izpostave, frozenset({(x, y)} | prejsnja_pot))
     return tocke
 
 
 def dosegljive(x, y, d, n, zemljevid):
-    tocke = dosegljive_rekurzivna(x, y, d, n, frozenset(chain(*zemljevid[0].values())), zemljevid[1])
+    print("Test:", x, y, d, n)
+    tocke = dosegljive_rekurzivna(x, y, d, n, int(n), frozenset(chain(*zemljevid[0].values())), zemljevid[1])
     return tocke
 
 
