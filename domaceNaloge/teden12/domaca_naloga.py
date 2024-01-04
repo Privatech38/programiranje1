@@ -24,8 +24,6 @@ def preberi_zemljevid(ime_dat):
                 izpostave.add((match.start(), i))
     return tocke, frozenset(izpostave)
 
-print(preberi_zemljevid("dravlje-z-izpostavami.txt")[1])
-
 def najblizji(x, y, c, zemljevid, prepovedani):
     iterable = c and set(zemljevid[0][c]) or set(chain(*zemljevid[0].values()))
     iterable -= {(x, y)}
