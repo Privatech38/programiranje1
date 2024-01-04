@@ -128,18 +128,27 @@ def dosegljive_rekurzivna(x, y, d, n, max_n, zemljevid, izpostave, prejsnja_pot=
         n = max_n
     # Zapisi tocke
     tocke = set()
+    najblizje_tocke = set()
     if n == 0:
-        return set()
-    najblizje_tocke = {tocka for tocka in zemljevid if razdalja((x, y), tocka) <= d}
-    tocke |= set(najblizje_tocke) - izpostave
+        najblizje_tocke = {tocka for tocka in izpostave if razdalja((x, y), tocka) <= d}
+        # if len(najblizje_izpostave) > 0:
+        #     print(x, y, n, "Imam blizu izpostave:", najblizje_izpostave)
+        #     for izpostava in najblizje_izpostave:
+        #         tocke |= dosegljive_rekurzivna(*izpostava, d, max_n, max_n, zemljevid, izpostave, prejsnja_pot)
+    else:
+        najblizje_tocke = {tocka for tocka in zemljevid if razdalja((x, y), tocka) <= d}
+        tocke |= set(najblizje_tocke) - izpostave
     najblizje_tocke -= prejsnja_pot
+    if n == max_n:
+        najblizje_tocke -= izpostave
+    # Define prejsnja pot
+    pot = prejsnja_pot if ((x, y) in izpostave) and n < max_n else frozenset({(x, y)} | prejsnja_pot)
     for tocka in najblizje_tocke:
-        tocke |= dosegljive_rekurzivna(*tocka, d, n - 1, max_n, zemljevid, izpostave, frozenset({(x, y)} | prejsnja_pot))
+        tocke |= dosegljive_rekurzivna(*tocka, d, n - 1, max_n, zemljevid, izpostave, pot)
     return tocke
 
 
 def dosegljive(x, y, d, n, zemljevid):
-    print("Test:", x, y, d, n)
     tocke = dosegljive_rekurzivna(x, y, d, n, int(n), frozenset(chain(*zemljevid[0].values())), zemljevid[1])
     return tocke
 
@@ -539,7 +548,6 @@ class Test08(NoWarningTest):
 
         self.assertEqual("b", johanca(1, 1, "473857<473858>", zemljevid))
 
-@unittest.skip('Works as intended')
 class Test09(NoWarningTest):
     def test_01_angelca(self):
         start = time.time()
