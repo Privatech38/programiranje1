@@ -16,6 +16,8 @@ class Turtle:
         self.width = 1
         self.color = risar.bela
         self.stamps = set()
+        self.macros = []
+        self.recording = False
         self.update()
 
     def update(self):
@@ -107,10 +109,23 @@ class Turtle:
             for oblika in stamp:
                 risar.odstrani(oblika)
 
+    def startRecording(self):
+        self.recording = True
+
+    def stopRecording(self):
+        self.recording = False
+        return self.macros
+
+    def play(self, trace):
+        for func, pars in trace:
+            func(*pars)
+
+
 
 zelva = Turtle()
-zelva.fly(risar.maxX/2, risar.maxY/2 + 100, 270)
-zelva.set_pause(0.25)
+zelva.fly(risar.maxX/2 - 10, risar.maxY/2 - 40, 0)
+zelva.setWidth(4)
+# zelva.set_pause(0.05)
 # zelva.wait(0.5)
 # zelva.pen_up()
 # zelva.wait(0.5)
@@ -124,13 +139,21 @@ zelva.set_pause(0.25)
 # zelva.wait(0.5)
 # zelva.show()
 # zelva.wait(0.5)
-for barva in [risar.modra, risar.rdeca, risar.zelena, risar.rumena]:
-    zelva.stamp()
-    zelva.setColor(barva)
-    zelva.forward(100)
-    zelva.right()
-    zelva.forward(100)
 
-zelva.clearStamps()
+for barva in [risar.modra, risar.rdeca, risar.zelena, risar.rumena]:
+    zelva.setColor(barva)
+    for i in range(4):
+        zelva.left()
+        zelva.forward(100)
+    zelva.pen_up()
+    zelva.forward(20)
+    zelva.pen_down()
+    zelva.right()
+
+risar.besedilo(risar.maxX/2 - 210, risar.maxY/2 + 80, "Bimbows", risar.bela, 100, "Franklin Gothic Medium")
+risar.besedilo(risar.maxX/2 + 190, risar.maxY/2 + 80, "py", risar.bela, 50, "Franklin Gothic Medium")
+
+
+zelva.hide()
 risar.stoj()
 
