@@ -13,9 +13,9 @@ class Turtle:
         self.body = risar.krog(0, 0, 5, risar.zelena, 3)
         self.head = risar.krog(0, 0, 2, risar.zelena, 3)
         self.pen_pos = risar.krog(0, 0, 2, risar.rumena, 3)
-        self.hidden = False
         self.width = 1
         self.color = risar.bela
+        self.stamps = set()
         self.update()
 
     def update(self):
@@ -94,6 +94,19 @@ class Turtle:
     def setColor(self, color):
         self.color = color
 
+    def stamp(self):
+        body = risar.krog(0, 0, 5, risar.zelena, 3)
+        head = risar.krog(0, 0, 2, risar.zelena, 3)
+        body.setPos(self.x, self.y)
+        phi = radians(90 - self.angle)
+        head.setPos(self.x + 5 * cos(phi), self.y - 5 * sin(phi))
+        self.stamps.add((body, head))
+
+    def clearStamps(self):
+        for stamp in self.stamps:
+            for oblika in stamp:
+                risar.odstrani(oblika)
+
 
 zelva = Turtle()
 zelva.fly(risar.maxX/2, risar.maxY/2 + 100, 270)
@@ -112,9 +125,12 @@ zelva.set_pause(0.25)
 # zelva.show()
 # zelva.wait(0.5)
 for barva in [risar.modra, risar.rdeca, risar.zelena, risar.rumena]:
+    zelva.stamp()
     zelva.setColor(barva)
     zelva.forward(100)
     zelva.right()
     zelva.forward(100)
+
+zelva.clearStamps()
 risar.stoj()
 
