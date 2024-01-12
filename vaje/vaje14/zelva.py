@@ -12,14 +12,15 @@ class Turtle:
         self.pause = 0
         self.body = risar.krog(0, 0, 5, risar.zelena, 3)
         self.head = risar.krog(0, 0, 2, risar.zelena, 3)
-        self.pen_status = risar.krog(0, 0, 2, risar.rumena, 3)
+        self.pen_pos = risar.krog(0, 0, 2, risar.rumena, 3)
+        self.hidden = False
         self.width = 1
         self.color = risar.bela
         self.update()
 
     def update(self):
         self.body.setPos(self.x, self.y)
-        self.pen_status.setPos(self.x, self.y)
+        self.pen_pos.setPos(self.x, self.y)
         phi = radians(90 - self.angle)
         self.head.setPos(self.x + 5 * cos(phi), self.y - 5 * sin(phi))
         risar.obnovi()
@@ -57,9 +58,12 @@ class Turtle:
 
     def pen_up(self):
         self.pen_active = False
+        self.pen_pos.hide()
 
     def pen_down(self):
         self.pen_active = True
+        if not self.head.isVisible():
+            self.pen_pos.show()
 
     def wait(self, s):
         risar.cakaj(s)
@@ -67,10 +71,13 @@ class Turtle:
     def hide(self):
         self.body.hide()
         self.head.hide()
+        self.pen_pos.hide()
 
     def show(self):
         self.body.show()
         self.head.show()
+        if self.pen_active:
+            self.pen_pos.show()
 
     def set_pause(self, s):
         self.pause = s
@@ -90,7 +97,20 @@ class Turtle:
 
 zelva = Turtle()
 zelva.fly(risar.maxX/2, risar.maxY/2 + 100, 270)
-# zelva.set_pause(0.25)
+zelva.set_pause(0.25)
+# zelva.wait(0.5)
+# zelva.pen_up()
+# zelva.wait(0.5)
+# zelva.hide()
+# zelva.wait(0.5)
+# zelva.show()
+# zelva.wait(0.5)
+# zelva.hide()
+# zelva.wait(0.5)
+# zelva.pen_down()
+# zelva.wait(0.5)
+# zelva.show()
+# zelva.wait(0.5)
 for barva in [risar.modra, risar.rdeca, risar.zelena, risar.rumena]:
     zelva.setColor(barva)
     zelva.forward(100)
