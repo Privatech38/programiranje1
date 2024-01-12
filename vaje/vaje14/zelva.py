@@ -12,15 +12,16 @@ class Turtle:
         self.pause = 0
         self.body = risar.krog(0, 0, 5, risar.zelena, 3)
         self.head = risar.krog(0, 0, 2, risar.zelena, 3)
+        self.pen_status = risar.krog(0, 0, 2, risar.rumena, 3)
         self.width = 1
         self.color = risar.bela
         self.update()
 
     def update(self):
         self.body.setPos(self.x, self.y)
+        self.pen_status.setPos(self.x, self.y)
         phi = radians(90 - self.angle)
         self.head.setPos(self.x + 5 * cos(phi), self.y - 5 * sin(phi))
-        risar.
         risar.obnovi()
         if self.pause:
             self.wait(self.pause)
@@ -30,7 +31,7 @@ class Turtle:
         nx = self.x + a * cos(phi)
         ny = self.y - a * sin(phi)
         if self.pen_active:
-            risar.crta(self.x, self.y, nx, ny)
+            risar.crta(self.x, self.y, nx, ny, self.color, self.width)
         self.x = nx
         self.y = ny
         self.update()
@@ -82,14 +83,18 @@ class Turtle:
 
     def setWidth(self, width):
         self.width = width
-        self.update()
 
     def setColor(self, color):
         self.color = color
-        self.update()
 
 
 zelva = Turtle()
-zelva.setColor(risar.rdeca)
+zelva.fly(risar.maxX/2, risar.maxY/2 + 100, 270)
+# zelva.set_pause(0.25)
+for barva in [risar.modra, risar.rdeca, risar.zelena, risar.rumena]:
+    zelva.setColor(barva)
+    zelva.forward(100)
+    zelva.right()
+    zelva.forward(100)
 risar.stoj()
 
