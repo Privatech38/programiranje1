@@ -1,5 +1,6 @@
 import re
 import unittest
+from collections import defaultdict
 from unittest.mock import patch, call
 
 
@@ -52,6 +53,41 @@ class Kolesar:
     def razdalja(self):
         return self.distance
 
+
+class Zbiralec(Kolesar):
+    def __init__(self, x, y, zemljevid):
+        super().__init__(zemljevid)
+        self.x = x
+        self.y = y
+        self.chars = defaultdict(lambda: 0)
+
+    def pojdi(self, smer):
+        super().pojdi(smer)
+        if not self.ded:
+            char = self.zemljevid[self.y][self.x]
+            if char != ".":
+                self.chars[char] += 1
+
+    def znacke(self):
+        return set(self.chars.keys())
+
+    def naj_znacke(self):
+        max_amount = 0
+        if len(self.chars) > 0:
+            max_amount = max(self.chars.values())
+        return {char for char, amount in self.chars.items() if amount == max_amount}
+
+    def trofeje(self):
+        last_num = 0
+        available_places = 3
+        trofeje = []
+        for trofeja in sorted([(char, amount) for char, amount in self.chars.items()], key=lambda elem: (-elem[1], elem[0])):
+            if last_num > trofeja[1] and available_places <= 0:
+                break
+            trofeje.append(trofeja)
+            last_num = trofeja[1]
+            available_places -= 1
+        return trofeje
 
 
 
