@@ -13,7 +13,7 @@ class Kolesar:
         self.zemljevid = zemljevid
 
     def pojdi(self, smer):
-        if smer == ">" and self.x == len(self.zemljevid[0]) - 1 or smer == "v" and self.y == len(self.zemljevid) - 1\
+        if smer == ">" and self.x == len(self.zemljevid[0]) - 1 or smer == "v" and self.y == len(self.zemljevid) - 1 \
                 or smer == "<" and self.x == 0 or smer == "^" and self.y == 0:
             self.ded = True
         if self.ded:
@@ -81,7 +81,8 @@ class Zbiralec(Kolesar):
         last_num = 0
         available_places = 3
         trofeje = []
-        for trofeja in sorted([(char, amount) for char, amount in self.chars.items()], key=lambda elem: (-elem[1], elem[0])):
+        for trofeja in sorted([(char, amount) for char, amount in self.chars.items()],
+                              key=lambda elem: (-elem[1], elem[0])):
             if last_num > trofeja[1] and available_places <= 0:
                 break
             trofeje.append(trofeja)
@@ -89,6 +90,13 @@ class Zbiralec(Kolesar):
             available_places -= 1
         return trofeje
 
+
+class Drsalec(Zbiralec):
+    pass
+
+
+class Sledi:
+    pass
 
 
 class Test06(unittest.TestCase):
@@ -385,7 +393,6 @@ r.b.........
 .ad......a..
 ............
 ..gl......g.""".strip().splitlines()
-
 
 if __name__ == '__main__':
     unittest.main()
