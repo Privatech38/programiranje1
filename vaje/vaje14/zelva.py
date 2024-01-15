@@ -114,6 +114,7 @@ class Turtle:
 
     def stopRecording(self):
         self.recording = False
+        self.macros = []
         return self.macros
 
     def play(self, trace):
