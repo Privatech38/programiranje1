@@ -92,11 +92,22 @@ class Zbiralec(Kolesar):
 
 
 class Drsalec(Zbiralec):
-    pass
+    def __init__(self, x, y, zemljevid, sledi):
+        super().__init__(x, y, zemljevid)
+        self.sledi = sledi
+
+    def pojdi(self, smer):
+        self.sledi[(self.x, self.y)] = smer
+        super().pojdi(smer)
+        if (self.x, self.y) not in self.sledi:
+            return
+        for i in range(3):
+            super().pojdi(self.sledi[(self.x, self.y)])
 
 
-class Sledi:
-    pass
+class Sledi(defaultdict):
+    def __init__(self):
+        super().__init__(lambda: "")
 
 
 class Test06(unittest.TestCase):
