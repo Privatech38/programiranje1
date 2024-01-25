@@ -37,7 +37,7 @@ ovire_counter = 0
 
 lives = 3
 points = 0
-level = 0
+level = 1
 
 game_over = False
 
@@ -87,7 +87,7 @@ while True:
         znaki_mol.remove(dotaknjen_znak)
         points += 1
         jump_channel.play(jump_sound)
-        novi_nivo = points // 5
+        novi_nivo = points // 5 + 1
         if novi_nivo <= 13:
             level = novi_nivo
 
